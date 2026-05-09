@@ -7,15 +7,16 @@ import {
     TouchableOpacity,
 } from "react-native";
 
-import api from "../../api/api";
+import { getAllKitchens } from "../../api/kitchenApi";
 
 export default function HomeScreen({ navigation }) {
     const [kitchens, setKitchens] = useState([]);
 
     const fetchKitchens = async () => {
         try {
-            const response = await api.get("/kitchen");
-            setKitchens(response.data.data);
+            const data = await getAllKitchens();
+
+            setKitchens(data);
         } catch (error) {
             // console.log(error);
             console.log("API ERROR:", error.response?.data || error.message);
