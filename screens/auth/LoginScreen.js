@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+
 import {
     View,
     Text,
@@ -7,20 +8,17 @@ import {
     StyleSheet,
 } from "react-native";
 
-export default function LoginScreen({ navigation }) {
-    const [phone, setPhone] = useState("");
-
-    const loginAsUser = () => {
-        navigation.replace("UserTabs");
-    };
-
-    const loginAsKitchen = () => {
-        navigation.replace("KitchenTabs");
-    };
+export default function LoginScreen({
+    navigation,
+}) {
+    const [phone, setPhone] =
+        useState("+9198");
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Home Chef</Text>
+            <Text style={styles.title}>
+                Home Chef
+            </Text>
 
             <TextInput
                 placeholder="Enter Phone Number"
@@ -32,7 +30,9 @@ export default function LoginScreen({ navigation }) {
 
             <TouchableOpacity
                 style={styles.userButton}
-                onPress={loginAsUser}
+                onPress={() =>
+                    navigation.replace("UserTabs")
+                }
             >
                 <Text style={styles.buttonText}>
                     Login as User
@@ -41,7 +41,11 @@ export default function LoginScreen({ navigation }) {
 
             <TouchableOpacity
                 style={styles.kitchenButton}
-                onPress={loginAsKitchen}
+                onPress={() =>
+                    navigation.replace(
+                        "KitchenTabs"
+                    )
+                }
             >
                 <Text style={styles.buttonText}>
                     Login as Kitchen
