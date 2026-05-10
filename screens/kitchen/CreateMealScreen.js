@@ -35,8 +35,8 @@ export default function CreateMealScreen() {
                 await createMeal({
                     name,
                     description,
-                    price,
-                    quantity,
+                    price: Number(price),
+                    quantity: Number(quantity),
                     type,
                 });
 
@@ -52,7 +52,7 @@ export default function CreateMealScreen() {
             } catch (error) {
                 console.log(
                     "CREATE MEAL ERROR:",
-                    error.message
+                    error.response?.data || error.message
                 );
             }
         };

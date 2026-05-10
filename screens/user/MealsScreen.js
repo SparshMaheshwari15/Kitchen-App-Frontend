@@ -9,13 +9,23 @@ import {
 
 import { getKitchenMeals } from "../../api/kitchenApi";
 import ScreenWrapper from "../../components/ScreenWrapper";
+import MealCard from "../../components/MealCard";
+import { useCart } from "../../context/CartContext";
+import AppButton from "../../components/AppButton";
+
 
 export default function MealsScreen({
     route,
+    navigation,
 }) {
     const { kitchenId, kitchenName } =
         route.params;
-
+    const {
+        addToCart,
+        cartItems,
+        increaseQuantity,
+        decreaseQuantity,
+    } = useCart();
     const [meals, setMeals] = useState([]);
 
     const fetchMeals = async () => {
@@ -37,32 +47,51 @@ export default function MealsScreen({
         fetchMeals();
     }, []);
 
-    const renderMeal = ({ item }) => (
-        <View style={styles.card}>
-            <Text style={styles.name}>
-                {item.name}
-            </Text>
+    const renderMeal = ({ item }) => {
 
-            <Text style={styles.type}>
-                {item.type}
-            </Text>
+        const cartItem =
+            cartItems.find(
+                (cart) =>
+                    cart.id === item.id
+            );
 
-            <Text style={styles.price}>
-                ₹{item.price}
-            </Text>
+        return (
+            <MealCard
+                meal={item}
 
-            <Text style={styles.quantity}>
-                Available: {item.quantity}
-            </Text>
-        </View>
-    );
+                cartQuantity={
+                    cartItem?.quantity || 0
+                }
 
+                onAddToCart={() =>
+                    addToCart(item)
+                }
+
+                onIncrease={() =>
+                    increaseQuantity(
+                        item.id
+                    )
+                }
+
+                onDecrease={() =>
+                    decreaseQuantity(
+                        item.id
+                    )
+                }
+            />
+        );
+    };
     return (
         <ScreenWrapper>
             <Text style={styles.title}>
                 {kitchenName}
             </Text>
-
+            <AppButton
+                title="Go To Cart"
+                onPress={() =>
+                    navigation.navigate("Cart")
+                }
+            />
             <FlatList
                 data={meals}
                 keyExtractor={(item) => item.id}
@@ -85,12 +114,7 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
 
-    card: {
-        backgroundColor: "#f5f5f5",
-        padding: 15,
-        borderRadius: 12,
-        marginBottom: 15,
-    },
+
 
     name: {
         fontSize: 18,
@@ -103,14 +127,5 @@ const styles = StyleSheet.create({
         marginBottom: 5,
     },
 
-    price: {
-        color: "#ff7a00",
-        fontWeight: "bold",
-        fontSize: 16,
-        marginBottom: 5,
-    },
 
-    quantity: {
-        color: "#444",
-    },
 });

@@ -56,15 +56,6 @@ export default function HomeScreen({
     return (
         <ScreenWrapper>
 
-            <AppButton
-                title="Logout"
-                type="secondary"
-                onPress={() =>
-                    navigation.replace(
-                        "Login"
-                    )
-                }
-            />
 
             <FlatList
                 data={kitchens}
@@ -76,7 +67,23 @@ export default function HomeScreen({
                     false
                 }
             />
-
+            <AppButton
+                title="My Orders"
+                onPress={() =>
+                    navigation.navigate(
+                        "MyOrders"
+                    )
+                }
+            />
+            <AppButton
+                title="Logout"
+                type="secondary"
+                onPress={() =>
+                    navigation.replace(
+                        "Login"
+                    )
+                }
+            />
         </ScreenWrapper>
     );
 }
