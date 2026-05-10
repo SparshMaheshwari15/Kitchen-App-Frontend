@@ -8,6 +8,7 @@ import {
 } from "react-native";
 
 import { getKitchenMeals } from "../../api/kitchenApi";
+import ScreenWrapper from "../../components/ScreenWrapper";
 
 export default function MealsScreen({
     route,
@@ -57,7 +58,7 @@ export default function MealsScreen({
     );
 
     return (
-        <View style={styles.container}>
+        <ScreenWrapper>
             <Text style={styles.title}>
                 {kitchenName}
             </Text>
@@ -67,7 +68,7 @@ export default function MealsScreen({
                 keyExtractor={(item) => item.id}
                 renderItem={renderMeal}
             />
-        </View>
+        </ScreenWrapper>
     );
 }
 

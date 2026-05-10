@@ -17,6 +17,7 @@ import {
 import { firebaseApp } from "../../firebase/config";
 
 import { loginUser } from "../../api/authApi";
+import ScreenWrapper from "../../components/ScreenWrapper";
 
 export default function OtpScreen({
     route,
@@ -60,7 +61,7 @@ export default function OtpScreen({
     };
 
     return (
-        <View style={styles.container}>
+        <ScreenWrapper>
             <Text style={styles.title}>
                 Enter OTP
             </Text>
@@ -81,7 +82,7 @@ export default function OtpScreen({
                     Verify OTP
                 </Text>
             </TouchableOpacity>
-        </View>
+        </ScreenWrapper>
     );
 }
 

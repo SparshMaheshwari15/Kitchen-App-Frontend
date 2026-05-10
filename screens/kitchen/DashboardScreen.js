@@ -3,9 +3,14 @@ import { View, Text, StyleSheet } from "react-native";
 
 export default function DashboardScreen() {
     return (
-        <View style={styles.container}>
-            <Text style={styles.text}>
-                Kitchen Dashboard
+        // <ScreenWrapper>
+        //     <Text style={styles.text}>
+        //         Kitchen Dashboard
+        //     </Text>
+        // </ScreenWrapper>
+        <View className="flex-1 items-center justify-center bg-red-200">
+            <Text className="text-3xl font-bold text-red-500">
+                Tailwind Working
             </Text>
         </View>
     );

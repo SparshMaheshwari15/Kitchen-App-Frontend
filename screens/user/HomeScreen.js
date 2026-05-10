@@ -1,93 +1,82 @@
-import React, { useEffect, useState } from "react";
+import React, {
+    useEffect,
+    useState,
+} from "react";
+
 import {
-    View,
-    Text,
     FlatList,
-    StyleSheet,
-    TouchableOpacity,
 } from "react-native";
 
 import { getAllKitchens } from "../../api/kitchenApi";
 
-export default function HomeScreen({ navigation }) {
-    const [kitchens, setKitchens] = useState([]);
+import ScreenWrapper from "../../components/ScreenWrapper";
+import KitchenCard from "../../components/KitchenCard";
+import AppButton from "../../components/AppButton";
 
-    const fetchKitchens = async () => {
-        try {
-            const data = await getAllKitchens();
+export default function HomeScreen({
+    navigation,
+}) {
+    const [kitchens, setKitchens] =
+        useState([]);
 
-            setKitchens(data);
-        } catch (error) {
-            // console.log(error);
-            console.log("API ERROR:", error.response?.data || error.message);
-        }
-    };
+    const fetchKitchens =
+        async () => {
+            try {
+                const data =
+                    await getAllKitchens();
+
+                setKitchens(data);
+            } catch (error) {
+                console.log(error.message);
+            }
+        };
 
     useEffect(() => {
         fetchKitchens();
     }, []);
 
-    const renderKitchen = ({ item }) => (
-        <TouchableOpacity
-            style={styles.card}
+    const renderKitchen = ({
+        item,
+    }) => (
+        <KitchenCard
+            kitchen={item}
             onPress={() =>
-                navigation.navigate("Meals", {
-                    kitchenId: item.id,
-                    kitchenName: item.name,
-                })
+                navigation.navigate(
+                    "Meals",
+                    {
+                        kitchenId: item.id,
+                        kitchenName:
+                            item.name,
+                    }
+                )
             }
-        >
-            <Text style={styles.name}>
-                {item.name}
-            </Text>
-
-            <Text style={styles.description}>
-                {item.address}
-            </Text>
-
-            <Text style={styles.price}>
-                Starting From ₹{item.cheapestPrice}
-            </Text>
-        </TouchableOpacity>
+        />
     );
 
     return (
-        <View style={styles.container}>
+        <ScreenWrapper>
+
+            <AppButton
+                title="Logout"
+                type="secondary"
+                onPress={() =>
+                    navigation.replace(
+                        "Login"
+                    )
+                }
+            />
+
             <FlatList
                 data={kitchens}
-                keyExtractor={(item) => item.id.toString()}
+                keyExtractor={(item) =>
+                    item.id.toString()
+                }
                 renderItem={renderKitchen}
+                showsVerticalScrollIndicator={
+                    false
+                }
             />
-        </View>
+
+        </ScreenWrapper>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        padding: 15,
-        backgroundColor: "#fff",
-    },
-
-    card: {
-        backgroundColor: "#f5f5f5",
-        padding: 15,
-        borderRadius: 12,
-        marginBottom: 15,
-    },
-
-    name: {
-        fontSize: 18,
-        fontWeight: "bold",
-        marginBottom: 5,
-    },
-
-    description: {
-        color: "#666",
-    },
-    price: {
-        marginTop: 8,
-        fontWeight: "bold",
-        color: "#ff7a00",
-    },
-});

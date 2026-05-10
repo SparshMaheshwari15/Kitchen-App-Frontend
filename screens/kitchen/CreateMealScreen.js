@@ -10,7 +10,9 @@ import {
 } from "react-native";
 
 import { createMeal } from "../../api/mealApi";
-
+import ScreenWrapper from "../../components/ScreenWrapper";
+import AppButton from "../../components/AppButton";
+import TypeButton from "../../components/TypeButton";
 export default function CreateMealScreen() {
     const [name, setName] =
         useState("");
@@ -56,7 +58,7 @@ export default function CreateMealScreen() {
         };
 
     return (
-        <View style={styles.container}>
+        <ScreenWrapper>
             <Text style={styles.title}>
                 Create Meal
             </Text>
@@ -92,51 +94,42 @@ export default function CreateMealScreen() {
             />
 
             <View style={styles.typeRow}>
-                <TouchableOpacity
-                    style={[
-                        styles.typeButton,
-                        type === "VEG" &&
-                        styles.activeType,
-                    ]}
-                    onPress={() => setType("VEG")}
-                >
-                    <Text>VEG</Text>
-                </TouchableOpacity>
 
-                <TouchableOpacity
-                    style={[
-                        styles.typeButton,
-                        type === "EGG" &&
-                        styles.activeType,
-                    ]}
-                    onPress={() => setType("EGG")}
-                >
-                    <Text>EGG</Text>
-                </TouchableOpacity>
+                <TypeButton
+                    title="VEG"
+                    active={type === "VEG"}
+                    onPress={() =>
+                        setType("VEG")
+                    }
+                />
 
-                <TouchableOpacity
-                    style={[
-                        styles.typeButton,
-                        type === "NON_VEG" &&
-                        styles.activeType,
-                    ]}
+                <TypeButton
+                    title="EGG"
+                    active={type === "EGG"}
+                    onPress={() =>
+                        setType("EGG")
+                    }
+                />
+
+                <TypeButton
+                    title="NON VEG"
+                    active={type === "NON_VEG"}
                     onPress={() =>
                         setType("NON_VEG")
                     }
-                >
-                    <Text>NON VEG</Text>
-                </TouchableOpacity>
+                />
+
             </View>
 
-            <TouchableOpacity
-                style={styles.button}
+            <AppButton
+                title="Create Meal"
                 onPress={handleCreateMeal}
             >
                 <Text style={styles.buttonText}>
                     Create Meal
                 </Text>
-            </TouchableOpacity>
-        </View>
+            </AppButton>
+        </ScreenWrapper>
     );
 }
 

@@ -7,6 +7,7 @@ import {
     TouchableOpacity,
     StyleSheet,
 } from "react-native";
+import ScreenWrapper from "../../components/ScreenWrapper";
 
 export default function LoginScreen({
     navigation,
@@ -15,7 +16,7 @@ export default function LoginScreen({
         useState("+9198");
 
     return (
-        <View style={styles.container}>
+        <ScreenWrapper>
             <Text style={styles.title}>
                 Home Chef
             </Text>
@@ -51,7 +52,7 @@ export default function LoginScreen({
                     Login as Kitchen
                 </Text>
             </TouchableOpacity>
-        </View>
+        </ScreenWrapper>
     );
 }
 
