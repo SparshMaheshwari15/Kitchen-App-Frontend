@@ -166,6 +166,9 @@
 //         textAlign: "center",
 //     },
 // });
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+import { loginUser } from "../../api/authApi";
 
 import React, { useState } from "react";
 
@@ -175,6 +178,7 @@ import {
     TextInput,
     TouchableOpacity,
     StyleSheet,
+    Alert
 } from "react-native";
 
 import ScreenWrapper from "../../components/ScreenWrapper";
@@ -184,7 +188,74 @@ export default function LoginScreen({
 }) {
     const [phone, setPhone] =
         useState("");
+    const [loading, setLoading] =
+        useState(false);
+    const handleLogin =
+        async () => {
+            setLoading(true);
+            try {
 
+                if (!phone) {
+
+                    Alert.alert(
+                        "Enter Phone Number"
+                    );
+
+                    return;
+                }
+                if (phone.length !== 10) {
+
+                    Alert.alert(
+                        "Invalid Phone Number",
+                        "Phone number must be 10 digits"
+                    );
+
+                    return;
+                }
+                const response =
+                    await loginUser(
+                        `+91${phone}`
+                    )
+
+                const user =
+                    response.user;
+
+                await AsyncStorage.setItem(
+                    "devPhone",
+                    user.phone
+                );
+
+                if (
+                    user.role ===
+                    "KITCHEN"
+                ) {
+
+                    navigation.replace(
+                        "KitchenTabs"
+                    );
+
+                } else {
+
+                    navigation.replace(
+                        "UserTabs"
+                    );
+                }
+
+            } catch (error) {
+
+                console.log(
+                    error.response?.data ||
+                    error.message
+                );
+
+                Alert.alert(
+                    "Login Failed"
+                );
+            }
+            finally {
+                setLoading(false);
+            }
+        };
     return (
         <ScreenWrapper>
             <View style={styles.container}>
@@ -210,14 +281,40 @@ export default function LoginScreen({
                             Phone Number
                         </Text>
 
-                        <TextInput
-                            placeholder="+91 98765 43210"
-                            placeholderTextColor="#bbb"
-                            value={phone}
-                            onChangeText={setPhone}
-                            keyboardType="phone-pad"
-                            style={styles.input}
-                        />
+                        <View style={styles.phoneContainer}>
+
+                            <View style={styles.countryCode}>
+                                <Text style={styles.countryCodeText}>
+                                    +91
+                                </Text>
+                            </View>
+
+                            <TextInput
+                                placeholder="Enter phone number"
+                                placeholderTextColor="#bbb"
+                                value={phone}
+
+                                onChangeText={(text) => {
+
+                                    const cleaned =
+                                        text.replace(
+                                            /[^0-9]/g,
+                                            ""
+                                        );
+
+                                    setPhone(
+                                        cleaned
+                                    );
+                                }}
+
+                                keyboardType="number-pad"
+
+                                maxLength={10}
+
+                                style={styles.phoneInput}
+                            />
+
+                        </View>
                     </View>
 
                     <TouchableOpacity
@@ -225,30 +322,15 @@ export default function LoginScreen({
                             styles.button,
                             styles.userButton,
                         ]}
-                        onPress={() =>
-                            navigation.replace(
-                                "UserTabs"
-                            )
-                        }
+                        onPress={handleLogin}
+                        disabled={loading}
                     >
                         <Text style={styles.buttonText}>
-                            👤 Continue as User
-                        </Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity
-                        style={[
-                            styles.button,
-                            styles.kitchenButton,
-                        ]}
-                        onPress={() =>
-                            navigation.replace(
-                                "KitchenTabs"
-                            )
-                        }
-                    >
-                        <Text style={styles.buttonText}>
-                            👨‍🍳 Continue as Kitchen
+                            {
+                                loading
+                                    ? "Please wait..."
+                                    : "Continue"
+                            }
                         </Text>
                     </TouchableOpacity>
 
@@ -379,5 +461,36 @@ const styles = StyleSheet.create({
         color: "#999",
         textAlign: "center",
         lineHeight: 18,
+    },
+    phoneContainer: {
+        flexDirection: "row",
+        alignItems: "center",
+        borderWidth: 2,
+        borderColor: "#e5e7eb",
+        borderRadius: 16,
+        backgroundColor: "#fff",
+        overflow: "hidden",
+    },
+
+    countryCode: {
+        backgroundColor: "#f3f4f6",
+        paddingHorizontal: 16,
+        paddingVertical: 18,
+        borderRightWidth: 1,
+        borderRightColor: "#e5e7eb",
+    },
+
+    countryCodeText: {
+        fontSize: 16,
+        fontWeight: "700",
+        color: "#222",
+    },
+
+    phoneInput: {
+        flex: 1,
+        paddingHorizontal: 16,
+        paddingVertical: 16,
+        fontSize: 16,
+        color: "#222",
     },
 });

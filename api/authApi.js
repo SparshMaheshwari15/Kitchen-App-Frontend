@@ -1,14 +1,29 @@
+// import api from "./api";
+
+// export const loginUser = async (
+//     idToken
+// ) => {
+//     const response = await api.post(
+//         "/auth/login",
+//         {
+//             idToken,
+//         }
+//     );
+
+//     return response.data;
+// };
+
+
 import api from "./api";
 
-export const loginUser = async (
-    idToken
-) => {
-    const response = await api.post(
-        "/auth/login",
-        {
-            idToken,
-        }
-    );
+export const loginUser =
+    async (phone) => {
 
-    return response.data;
-};
+        const response =
+            await api.post(
+                "/auth/login",
+                { phone }
+            );
+
+        return response.data;
+    };
