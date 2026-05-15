@@ -25,7 +25,9 @@ export const CartProvider = ({
                 {
                     ...meal,
                     quantity: 1,
-                },
+                    quantityAvailable:
+                        meal.quantity,
+                }
             ]);
 
             return;
@@ -60,13 +62,29 @@ export const CartProvider = ({
                 {
                     ...meal,
                     quantity: 1,
-                },
+                    quantityAvailable:
+                        meal.quantity,
+                }
             ]);
         }
     };
     const increaseQuantity = (
         mealId
     ) => {
+
+        const existingItem =
+            cartItems.find(
+                (item) =>
+                    item.id === mealId
+            );
+
+        if (
+            existingItem.quantity >=
+            existingItem.quantityAvailable
+        ) {
+
+            return;
+        }
 
         const updatedCart =
             cartItems.map((item) =>

@@ -95,7 +95,19 @@ export default function MealCard({
                                     </Text>
 
                                     <TouchableOpacity
-                                        style={styles.qtyButton}
+                                        style={[
+                                            styles.qtyButton,
+
+                                            cartQuantity >=
+                                            meal.quantity &&
+                                            styles.disabledButton,
+                                        ]}
+
+                                        disabled={
+                                            cartQuantity >=
+                                            meal.quantity
+                                        }
+
                                         onPress={onIncrease}
                                     >
                                         <Text style={styles.qtyText}>
@@ -245,5 +257,8 @@ const styles = StyleSheet.create({
         marginHorizontal: 14,
         fontSize: 16,
         fontWeight: "700",
+    },
+    disabledButton: {
+        opacity: 0.5,
     },
 });
