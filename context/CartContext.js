@@ -1,8 +1,10 @@
 import React, {
     createContext,
     useContext,
+    useEffect,
     useState,
 } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const CartContext =
     createContext();
@@ -12,7 +14,45 @@ export const CartProvider = ({
 }) => {
     const [cartItems, setCartItems] =
         useState([]);
+    useEffect(() => {
 
+        loadCart();
+
+    }, []);
+    useEffect(() => {
+
+        AsyncStorage.setItem(
+            "cart",
+            JSON.stringify(
+                cartItems
+            )
+        );
+
+    }, [cartItems]);
+    const loadCart =
+        async () => {
+
+            try {
+
+                const storedCart =
+                    await AsyncStorage.getItem(
+                        "cart"
+                    );
+
+                if (storedCart) {
+
+                    setCartItems(
+                        JSON.parse(
+                            storedCart
+                        )
+                    );
+                }
+
+            } catch (error) {
+
+                console.log(error);
+            }
+        };
     const addToCart = (meal) => {
 
         if (
