@@ -1,34 +1,87 @@
 import React from "react";
 
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import {
+    createBottomTabNavigator,
+} from "@react-navigation/bottom-tabs";
 
-import DashboardScreen from "../screens/kitchen/DashboardScreen";
-import OrdersScreen from "../screens/kitchen/OrdersScreen";
-import CreateMealScreen from "../screens/kitchen/CreateMealScreen";
-import MealsManagementScreen from "../screens/kitchen/MealsManagementScreen";
+import {
+    createNativeStackNavigator,
+} from "@react-navigation/native-stack";
 
 import {
     Ionicons,
 } from "@expo/vector-icons";
-const Tab = createBottomTabNavigator();
+
+import DashboardScreen from "../screens/kitchen/DashboardScreen";
+
+import OrdersScreen from "../screens/kitchen/OrdersScreen";
+
+import MealsManagementScreen from "../screens/kitchen/MealsManagementScreen";
+
+import CreateMealScreen from "../screens/kitchen/CreateMealScreen";
+
+import KitchenProfileScreen from "../screens/kitchen/KitchenProfileScreen";
+
+const Tab =
+    createBottomTabNavigator();
+
+const Stack =
+    createNativeStackNavigator();
+
+function ProfileStack() {
+
+    return (
+
+        <Stack.Navigator>
+
+            <Stack.Screen
+                name="KitchenProfile"
+                component={KitchenProfileScreen}
+
+                options={{
+                    title: "Profile",
+                }}
+            />
+
+            <Stack.Screen
+                name="MealsManagement"
+                component={MealsManagementScreen}
+
+                options={{
+                    title: "Manage Meals",
+                }}
+            />
+
+            <Stack.Screen
+                name="CreateMeal"
+                component={CreateMealScreen}
+
+                options={{
+                    title: "Create Meal",
+                }}
+            />
+
+        </Stack.Navigator>
+    );
+}
 
 export default function KitchenTabs() {
+
     return (
-        <Tab.Navigator screenOptions={{
-            // headerShown: false,
 
-            tabBarActiveTintColor:
-                "#FF6B00",
+        <Tab.Navigator
 
-            tabBarInactiveTintColor:
-                "#888",
+            screenOptions={{
+                headerShown: false,
 
-            tabBarStyle: {
-                // height: 70,
-                paddingBottom: 10,
-                paddingTop: 10,
-            },
-        }}>
+                tabBarActiveTintColor:
+                    "#FF6B00",
+
+                tabBarInactiveTintColor:
+                    "#888",
+            }}
+        >
+
             <Tab.Screen
                 name="Dashboard"
                 component={DashboardScreen}
@@ -38,6 +91,7 @@ export default function KitchenTabs() {
                         color,
                         size,
                     }) => (
+
                         <Ionicons
                             name="grid"
                             size={size}
@@ -56,6 +110,7 @@ export default function KitchenTabs() {
                         color,
                         size,
                     }) => (
+
                         <Ionicons
                             name="receipt"
                             size={size}
@@ -66,18 +121,17 @@ export default function KitchenTabs() {
             />
 
             <Tab.Screen
-                name="CreateMeal"
-                component={CreateMealScreen}
+                name="Profile"
+                component={ProfileStack}
 
                 options={{
-                    title: "Create Meal",
-
                     tabBarIcon: ({
                         color,
                         size,
                     }) => (
+
                         <Ionicons
-                            name="restaurant"
+                            name="person"
                             size={size}
                             color={color}
                         />
@@ -85,23 +139,6 @@ export default function KitchenTabs() {
                 }}
             />
 
-            <Tab.Screen
-                name="Meals"
-                component={MealsManagementScreen}
-
-                options={{
-                    tabBarIcon: ({
-                        color,
-                        size,
-                    }) => (
-                        <Ionicons
-                            name="fast-food"
-                            size={size}
-                            color={color}
-                        />
-                    ),
-                }}
-            />
         </Tab.Navigator>
     );
 }
