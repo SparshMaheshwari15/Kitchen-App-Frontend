@@ -11,11 +11,14 @@ import ScreenWrapper from "../../components/ScreenWrapper";
 import AppButton from "../../components/AppButton";
 
 import { COLORS } from "../../theme/colors";
-
+import {
+    useAuth,
+} from "../../context/AuthContext";
 export default function DashboardScreen({
     navigation,
 }) {
-
+    const { logout } =
+        useAuth();
     return (
         <ScreenWrapper>
 
@@ -50,11 +53,15 @@ export default function DashboardScreen({
             <AppButton
                 title="Logout"
                 type="secondary"
-                onPress={() =>
+
+                onPress={async () => {
+
+                    await logout();
+
                     navigation.replace(
                         "Login"
-                    )
-                }
+                    );
+                }}
             />
 
         </ScreenWrapper>

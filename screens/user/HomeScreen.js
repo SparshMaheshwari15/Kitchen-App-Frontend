@@ -12,13 +12,16 @@ import { getAllKitchens } from "../../api/kitchenApi";
 import ScreenWrapper from "../../components/ScreenWrapper";
 import KitchenCard from "../../components/KitchenCard";
 import AppButton from "../../components/AppButton";
-
+import {
+    useAuth,
+} from "../../context/AuthContext";
 export default function HomeScreen({
     navigation,
 }) {
     const [kitchens, setKitchens] =
         useState([]);
-
+    const { logout, isGuest } =
+        useAuth();
     const fetchKitchens =
         async () => {
             try {
@@ -67,23 +70,28 @@ export default function HomeScreen({
                     false
                 }
             />
-            <AppButton
-                title="My Orders"
-                onPress={() =>
-                    navigation.navigate(
-                        "MyOrders"
-                    )
-                }
-            />
-            <AppButton
-                title="Logout"
-                type="secondary"
-                onPress={() =>
-                    navigation.replace(
-                        "Login"
-                    )
-                }
-            />
+            {
+                !isGuest && (
+                    <>
+                        <AppButton
+                            title="My Orders"
+                            onPress={() =>
+                                navigation.navigate("MyOrders")
+                            }
+                        />
+
+                        <AppButton
+                            title="Logout"
+                            type="secondary"
+                            onPress={async () => {
+                                await logout();
+
+                                navigation.replace("Login");
+                            }}
+                        />
+                    </>
+                )
+            }
         </ScreenWrapper>
     );
 }

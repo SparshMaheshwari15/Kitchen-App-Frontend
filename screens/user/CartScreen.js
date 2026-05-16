@@ -19,10 +19,14 @@ import { COLORS } from "../../theme/colors";
 import { Alert } from "react-native";
 
 import { createOrder } from "../../api/orderApi";
+import {
+    useAuth,
+} from "../../context/AuthContext";
 
 export default function CartScreen({
     navigation }) {
-
+    const { isGuest } =
+        useAuth();
     const {
         cartItems,
         removeFromCart,
@@ -100,57 +104,92 @@ export default function CartScreen({
 
         </View>
     );
-    const handlePlaceOrder =
-        async () => {
+    const handlePlaceOrder = async () => {
+        if (isGuest) {
 
-            try {
+            Alert.alert(
+                "Login Required",
+                "Please login to place an order",
+                [
+                    {
+                        text: "Cancel",
+                        style: "cancel",
+                    },
 
-                const kitchenId =
-                    cartItems[0].kitchenId;
+                    {
+                        text: "Login",
 
-                const orderData = {
-                    kitchenId,
+                        onPress: () =>
+                            navigation.navigate(
+                                "Login", {
+                                redirectTo: "Cart",
+                            }
+                            ),
+                    },
+                ]
+            );
 
-                    addressId:
-                        selectedAddress.id,
+            return;
+        }
+        try {
 
-                    items: cartItems.map(
-                        (item) => ({
-                            mealId: item.id,
-                            quantity:
-                                item.quantity,
-                        })
-                    ),
-                };
-                if (!selectedAddress) {
-
-                    Alert.alert(
-                        "Select Address",
-                        "Please select delivery address"
-                    );
-
-                    return;
-                }
-                await createOrder(
-                    orderData
-                );
-
-                clearCart();
+            const kitchenId =
+                cartItems[0].kitchenId;
+            if (!selectedAddress) {
 
                 Alert.alert(
-                    "Success",
-                    "Order Placed Successfully"
+                    "Select Address",
+                    "Please select delivery address"
                 );
 
-            } catch (error) {
-
-                console.log(
-                    "ORDER ERROR:",
-                    error.response?.data ||
-                    error.message
-                );
+                return;
             }
-        };
+            const orderData = {
+                kitchenId,
+
+                addressId:
+                    selectedAddress.id,
+
+                items: cartItems.map(
+                    (item) => ({
+                        mealId: item.id,
+                        quantity:
+                            item.quantity,
+                    })
+                ),
+            };
+
+            await createOrder(orderData);
+
+            // clearCart();
+
+            Alert.alert(
+                "Success",
+                "Order Placed Successfully",
+                [
+                    {
+                        text: "OK",
+
+                        onPress: () => {
+
+                            clearCart();
+
+                            navigation.navigate(
+                                "Home"
+                            );
+                        },
+                    },
+                ]
+            );
+        } catch (error) {
+
+            console.log(
+                "ORDER ERROR:",
+                error.response?.data ||
+                error.message
+            );
+        }
+    };
     return (
         <ScreenWrapper>
 
@@ -178,23 +217,25 @@ export default function CartScreen({
                             }
                         />
 
-                        <AppButton
-                            title={
-                                selectedAddress
-                                    ? selectedAddress.label
-                                    : "Select Address"
-                            }
+                        {!isGuest && (
+                            <AppButton
+                                title={
+                                    selectedAddress
+                                        ? selectedAddress.label
+                                        : "Select Address"
+                                }
 
-                            onPress={() =>
-                                navigation.navigate(
-                                    "Address",
-                                    {
-                                        onSelectAddress:
-                                            setSelectedAddress,
-                                    }
-                                )
-                            }
-                        />
+                                onPress={() =>
+                                    navigation.navigate(
+                                        "Address",
+                                        {
+                                            onSelectAddress:
+                                                setSelectedAddress,
+                                        }
+                                    )
+                                }
+                            />
+                        )}
                         <View style={styles.footer}>
 
                             <Text style={styles.total}>

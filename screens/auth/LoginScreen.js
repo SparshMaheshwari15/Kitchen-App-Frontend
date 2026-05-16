@@ -166,8 +166,7 @@
 //         textAlign: "center",
 //     },
 // });
-import AsyncStorage from "@react-native-async-storage/async-storage";
-
+import { useAuth } from "../../context/AuthContext";
 import { loginUser } from "../../api/authApi";
 
 import React, { useState } from "react";
@@ -185,33 +184,39 @@ import ScreenWrapper from "../../components/ScreenWrapper";
 
 export default function LoginScreen({
     navigation,
+    route
 }) {
     const [phone, setPhone] =
-        useState("");
+        useState("9999999999");
     const [loading, setLoading] =
         useState(false);
+    const { login } =
+        useAuth();
+    const redirectTo =
+        route.params?.redirectTo;
     const handleLogin =
         async () => {
+            if (!phone) {
+
+                Alert.alert(
+                    "Enter Phone Number"
+                );
+
+                return;
+            }
+            if (phone.length !== 10) {
+
+                Alert.alert(
+                    "Invalid Phone Number",
+                    "Phone number must be 10 digits"
+                );
+
+                return;
+            }
             setLoading(true);
             try {
 
-                if (!phone) {
 
-                    Alert.alert(
-                        "Enter Phone Number"
-                    );
-
-                    return;
-                }
-                if (phone.length !== 10) {
-
-                    Alert.alert(
-                        "Invalid Phone Number",
-                        "Phone number must be 10 digits"
-                    );
-
-                    return;
-                }
                 const response =
                     await loginUser(
                         `+91${phone}`
@@ -220,25 +225,19 @@ export default function LoginScreen({
                 const user =
                     response.user;
 
-                await AsyncStorage.setItem(
-                    "devPhone",
-                    user.phone
-                );
-
-                if (
-                    user.role ===
-                    "KITCHEN"
-                ) {
-
+                await login(user);
+                if (user.role === "KITCHEN") {
                     navigation.replace(
                         "KitchenTabs"
                     );
-
                 } else {
-
-                    navigation.replace(
-                        "UserTabs"
-                    );
+                    if (redirectTo) {
+                        navigation.replace("UserTabs", {
+                            screen: redirectTo,
+                        });
+                    } else {
+                        navigation.replace("UserTabs");
+                    }
                 }
 
             } catch (error) {
@@ -333,7 +332,17 @@ export default function LoginScreen({
                             }
                         </Text>
                     </TouchableOpacity>
-
+                    <TouchableOpacity
+                        onPress={() =>
+                            navigation.replace(
+                                "UserTabs"
+                            )
+                        }
+                    >
+                        <Text style={styles.skipText}>
+                            Skip for now
+                        </Text>
+                    </TouchableOpacity>
                 </View>
 
                 <View style={styles.footer}>
@@ -492,5 +501,11 @@ const styles = StyleSheet.create({
         paddingVertical: 16,
         fontSize: 16,
         color: "#222",
+    },
+    skipText: {
+        textAlign: "center",
+        marginTop: 18,
+        color: "#666",
+        fontWeight: "600",
     },
 });
