@@ -5,6 +5,9 @@ import React, {
 
 import {
     FlatList,
+    StyleSheet,
+    View,
+    Text
 } from "react-native";
 
 import { getAllKitchens } from "../../api/kitchenApi";
@@ -20,7 +23,7 @@ export default function HomeScreen({
 }) {
     const [kitchens, setKitchens] =
         useState([]);
-    const { logout, isGuest } =
+    const { user, isGuest } =
         useAuth();
     const fetchKitchens =
         async () => {
@@ -55,11 +58,44 @@ export default function HomeScreen({
             }
         />
     );
-
     return (
         <ScreenWrapper>
 
+            <View style={styles.header}>
 
+                {
+                    isGuest ? (
+
+                        <>
+
+                            <Text style={styles.greeting}>
+                                Discover Homemade Food 🍳
+                            </Text>
+
+                            <Text style={styles.subGreeting}>
+                                Fresh meals from local kitchens
+                            </Text>
+
+                        </>
+
+                    ) : (
+
+                        <>
+
+                            <Text style={styles.greeting}>
+                                Welcome back 👋
+                            </Text>
+
+                            <Text style={styles.subGreeting}>
+                                {user?.name}
+                            </Text>
+
+                        </>
+
+                    )
+                }
+
+            </View>
             <FlatList
                 data={kitchens}
                 keyExtractor={(item) =>
@@ -70,28 +106,24 @@ export default function HomeScreen({
                     false
                 }
             />
-            {
-                !isGuest && (
-                    <>
-                        <AppButton
-                            title="My Orders"
-                            onPress={() =>
-                                navigation.navigate("MyOrders")
-                            }
-                        />
-
-                        <AppButton
-                            title="Logout"
-                            type="secondary"
-                            onPress={async () => {
-                                await logout();
-
-                                navigation.replace("Login");
-                            }}
-                        />
-                    </>
-                )
-            }
         </ScreenWrapper>
     );
 }
+
+const styles = StyleSheet.create({
+    header: {
+        marginBottom: 20,
+    },
+
+    greeting: {
+        fontSize: 28,
+        fontWeight: "700",
+        color: "#222",
+    },
+
+    subGreeting: {
+        marginTop: 6,
+        color: "#666",
+        fontSize: 15,
+    },
+});

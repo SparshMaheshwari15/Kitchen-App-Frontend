@@ -1,9 +1,12 @@
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+const BASE_URL = __DEV__
+  ? "http://192.168.0.199:5000/api"
+  : "https://kitchen-app-backend-harn.onrender.com/api";
+
 const api = axios.create({
-    baseURL: "https://kitchen-app-backend-harn.onrender.com/api",
-  // baseURL: "http://192.168.135.125:5000/api",
+  baseURL: BASE_URL,
 });
 api.interceptors.request.use(
   async (config) => {
