@@ -52,18 +52,32 @@ function HomeStack() {
                 }
             />
 
+        </Stack.Navigator>
+    );
+}
+
+function ProfileStack() {
+
+    return (
+
+        <Stack.Navigator>
+
             <Stack.Screen
-                name="Address"
-                component={
-                    AddressScreen
-                }
+                name="ProfileMain"
+                component={ProfileScreen}
+                options={{
+                    title: "Profile",
+                }}
             />
 
             <Stack.Screen
                 name="MyOrders"
-                component={
-                    MyOrdersScreen
-                }
+                component={MyOrdersScreen}
+            />
+
+            <Stack.Screen
+                name="Address"
+                component={AddressScreen}
             />
 
         </Stack.Navigator>
@@ -80,10 +94,10 @@ export default function UserTabs() {
                 headerShown: false,
 
                 tabBarActiveTintColor:
-                    "#FF6B00",
+                "#FF6B00",
 
                 tabBarInactiveTintColor:
-                    "#888",
+                "#888",
             }}
         >
 
@@ -137,9 +151,9 @@ export default function UserTabs() {
                 name="Profile"
 
                 component={
-                    ProfileScreen
+                    ProfileStack
                 }
-
+                
                 options={{
                     tabBarIcon: ({
                         color,
