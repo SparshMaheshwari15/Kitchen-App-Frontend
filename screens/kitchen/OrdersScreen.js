@@ -99,6 +99,9 @@ export default function OrdersScreen() {
                     return "READY";
 
                 case "READY":
+                    return "OUT_FOR_DELIVERY";
+
+                case "OUT_FOR_DELIVERY":
                     return "DELIVERED";
 
                 default:
@@ -117,6 +120,9 @@ export default function OrdersScreen() {
                     return "Mark Ready";
 
                 case "READY":
+                    return "Send For Delivery";
+
+                case "OUT_FOR_DELIVERY":
                     return "Mark Delivered";
 
                 default:
