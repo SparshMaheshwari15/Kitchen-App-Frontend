@@ -35,8 +35,6 @@ export default function AddressScreen({
     route,
 }) {
 
-    const { onSelectAddress } =
-        route.params || {};
 
     const [addresses, setAddresses] =
         useState([]);
@@ -168,16 +166,13 @@ export default function AddressScreen({
             style={styles.card}
             onPress={() => {
 
-                if (
-                    onSelectAddress
-                ) {
-
-                    onSelectAddress(
-                        item
-                    );
-                }
-
-                navigation.goBack();
+                navigation.navigate(
+                    "Cart",
+                    {
+                        selectedAddress:
+                            item,
+                    }
+                );
             }}
         >
 

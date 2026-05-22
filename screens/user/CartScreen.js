@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import {
     View,
@@ -24,7 +24,7 @@ import {
 } from "../../context/AuthContext";
 
 export default function CartScreen({
-    navigation }) {
+    navigation, route }) {
     const { isGuest } =
         useAuth();
     const {
@@ -39,6 +39,19 @@ export default function CartScreen({
     const [selectedAddress,
         setSelectedAddress] =
         useState(null);
+    useEffect(() => {
+
+        if (
+            route.params?.selectedAddress
+        ) {
+
+            setSelectedAddress(
+                route.params
+                    .selectedAddress
+            );
+        }
+
+    }, [route.params]);
     const renderItem = ({
         item,
     }) => (
@@ -227,10 +240,9 @@ export default function CartScreen({
 
                                 onPress={() =>
                                     navigation.navigate(
-                                        "Address",
+                                        "Profile",
                                         {
-                                            onSelectAddress:
-                                                setSelectedAddress,
+                                            screen: "Address",
                                         }
                                     )
                                 }
