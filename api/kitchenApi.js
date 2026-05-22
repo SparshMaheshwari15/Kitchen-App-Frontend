@@ -11,3 +11,21 @@ export const getKitchenMeals = async (kitchenId) => {
 
     return response.data.data;
 };
+
+export const registerKitchen =
+    async (formData) => {
+
+        const response =
+            await api.post(
+                "/kitchen/register",
+                formData,
+                {
+                    headers: {
+                        "Content-Type":
+                            "multipart/form-data",
+                    },
+                }
+            );
+
+        return response.data;
+    };

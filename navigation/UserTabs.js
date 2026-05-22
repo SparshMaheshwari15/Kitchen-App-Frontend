@@ -23,6 +23,7 @@ import AddressScreen from "../screens/user/AddressScreen";
 import MyOrdersScreen from "../screens/user/MyOrdersScreen";
 
 import ProfileScreen from "../screens/user/ProfileScreen";
+import KitchenRegistrationScreen from "../screens/user/KitchenRegistrationScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -80,6 +81,13 @@ function ProfileStack() {
                 component={AddressScreen}
             />
 
+            <Stack.Screen
+                name="KitchenRegistration"
+                component={
+                    KitchenRegistrationScreen
+                }
+            />
+
         </Stack.Navigator>
     );
 }
@@ -94,10 +102,10 @@ export default function UserTabs() {
                 headerShown: false,
 
                 tabBarActiveTintColor:
-                "#FF6B00",
+                    "#FF6B00",
 
                 tabBarInactiveTintColor:
-                "#888",
+                    "#888",
             }}
         >
 
@@ -153,7 +161,7 @@ export default function UserTabs() {
                 component={
                     ProfileStack
                 }
-                
+
                 options={{
                     tabBarIcon: ({
                         color,

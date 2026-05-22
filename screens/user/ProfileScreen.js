@@ -80,6 +80,16 @@ export default function ProfileScreen({
                             />
 
                             <View style={styles.spacing} />
+                            <AppButton
+                                title="Become a Kitchen 👨‍🍳"
+
+                                onPress={() =>
+                                    navigation.navigate(
+                                        "KitchenRegistration"
+                                    )
+                                }
+                            />
+                            <View style={styles.spacing} />
 
                             <AppButton
                                 title="Logout"
